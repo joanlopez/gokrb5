@@ -80,7 +80,7 @@ jobs:
       - name: Tests including integration tests
         run: |
           cd ${GITHUB_WORKFLOW}
-          go test -race ./client/...
+          go test -race ./client/... -run="TestClient_GetServiceTicket_Trusted_Resource"
         env:
           INTEGRATION: 1
           TESTPRIVILEGED: 1

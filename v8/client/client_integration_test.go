@@ -586,7 +586,7 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error on login: %v\n", err)
 	}
-	spn := "HTTP/host.sub.resdom.gokrb5"
+	spn := "HTTP/host.random.resdom.gokrb5"
 	tkt, key, err := cl.GetServiceTicket(spn)
 	if err != nil {
 		t.Fatalf("error getting service ticket: %v\n", err)
