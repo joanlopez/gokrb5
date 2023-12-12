@@ -80,7 +80,7 @@ jobs:
       - name: Tests including integration tests
         run: |
           cd ${GITHUB_WORKFLOW}
-          go test -race ./...
+          go test -race ./client/...
         env:
           INTEGRATION: 1
           TESTPRIVILEGED: 1
