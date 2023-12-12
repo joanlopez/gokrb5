@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository }}-test
-          ref: ${{ github.ref }}
+          ref: 'cross-realm-support'
           path: testenv
 
       - name: Build integration test dependencies
