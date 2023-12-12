@@ -23,12 +23,12 @@ jobs:
       DNSUTILS_OVERRIDE_NS: 127.0.88.53:53
     steps:
       - name: Set up Go ${{ matrix.go }}
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
@@ -43,6 +43,18 @@ jobs:
           cd ${GITHUB_WORKFLOW}
           go test -race ./...
         id: unitTests
+
+      - name: Check out integration test dependencies
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}-test
+          ref: ${{ github.head_ref }}
+          path: testenv
+
+      - name: Build integration test dependencies
+        run: |
+          cd testenv/testenv/docker/krb5kdc-res
+          docker build -t jcmturner/gokrb5:kdc-resdom --force-rm=true --rm=true .
 
       - name: Start integration test dependencies
         run: |
