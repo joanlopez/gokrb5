@@ -594,6 +594,8 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error getting service ticket: %v\n", err)
 	}
+
+	assert.NoError(t, cl.Diagnostics(os.Stdout))
 	assert.Equal(t, spn, tkt.SName.PrincipalNameString())
 	assert.Equal(t, etypeID.ETypesByName["aes256-cts-hmac-sha1-96"], key.KeyType)
 
