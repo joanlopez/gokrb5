@@ -572,10 +572,14 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 		if r.Realm == "RESDOM.GOKRB5" {
 			c.Realms[i].KDC = []string{addr + ":" + testdata.KDC_PORT_TEST_GOKRB5_RESDOM}
 		}
+		if r.Realm == "SUB.TEST.GOKRB5" {
+			c.Realms[i].KDC = []string{addr + ":" + testdata.KDC_PORT_TEST_GOKRB5_SUB}
+		}
 	}
 
-	c.LibDefaults.DefaultRealm = "TEST.GOKRB5"
-	cl := client.NewWithKeytab("testuser1", "TEST.GOKRB5", kt, c)
+	c.LibDefaults.DefaultRealm = "SUB.TEST.GOKRB5"
+	// TODO : Create kt
+	cl := client.NewWithPassword("testuser1", "SUB.TEST.GOKRB5", "passwordvalue", c)
 	c.LibDefaults.DefaultTktEnctypes = []string{"aes256-cts-hmac-sha1-96"}
 	c.LibDefaults.DefaultTktEnctypeIDs = []int32{etypeID.ETypesByName["aes256-cts-hmac-sha1-96"]}
 	c.LibDefaults.DefaultTGSEnctypes = []string{"aes256-cts-hmac-sha1-96"}
@@ -586,7 +590,7 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error on login: %v\n", err)
 	}
-	spn := "HTTP/host.random.resdom.gokrb5"
+	spn := "HTTP/host.sub.resdom.gokrb5"
 	tkt, key, err := cl.GetServiceTicket(spn)
 	if err != nil {
 		t.Fatalf("error getting service ticket: %v\n", err)

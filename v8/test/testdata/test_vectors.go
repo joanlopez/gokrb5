@@ -127,6 +127,7 @@ const (
 	KDC_PORT_TEST_GOKRB5                     = "88"
 	KDC_PORT_TEST_GOKRB5_LASTEST             = "98"
 	KDC_PORT_TEST_GOKRB5_RESDOM              = "188"
+	KDC_PORT_TEST_GOKRB5_SUB                 = "288"
 	KDC_PORT_TEST_GOKRB5_OLD                 = "78"
 	KDC_PORT_TEST_GOKRB5_SHORTTICKETS        = "58"
 
