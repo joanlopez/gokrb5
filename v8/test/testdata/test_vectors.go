@@ -159,10 +159,17 @@ const (
   admin_server = 127.0.0.1:749
   default_domain = resdom.gokrb5
  }
+ SUB.TEST.GOKRB5 = {
+  kdc = 127.0.0.1:288
+  admin_server = 127.0.0.1:749
+  default_domain = sub.test.gokrb5
+ }
 
 [domain_realm]
  .test.gokrb5 = TEST.GOKRB5
  test.gokrb5 = TEST.GOKRB5
+ .sub.test.gokrb5 = SUB.TEST.GOKRB5
+ sub.test.gokrb5 = SUB.TEST.GOKRB5
  .resdom.gokrb5 = RESDOM.GOKRB5
  resdom.gokrb5 = RESDOM.GOKRB5
  `

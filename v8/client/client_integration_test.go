@@ -586,7 +586,6 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 	c.LibDefaults.DefaultTGSEnctypeIDs = []int32{etypeID.ETypesByName["aes256-cts-hmac-sha1-96"]}
 
 	err := cl.Login()
-
 	if err != nil {
 		t.Fatalf("error on login: %v\n", err)
 	}
