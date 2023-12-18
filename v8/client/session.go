@@ -166,6 +166,8 @@ func (s *sessions) JSON() (string, error) {
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
+		fmt.Println(s.Entries[k].tgt.Realm)
+		fmt.Printf("%+v\n", s.Entries[k].tgt.SName)
 		r, at, et, rt, kt := s.Entries[k].timeDetails()
 		j := jsonSession{
 			Realm:                r,
