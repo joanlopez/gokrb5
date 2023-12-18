@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -539,6 +540,64 @@ func TestClient_GetServiceTicket_Trusted_Resource_Domain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error getting service ticket: %v\n", err)
 	}
+	assert.Equal(t, spn, tkt.SName.PrincipalNameString())
+	assert.Equal(t, etypeID.ETypesByName["aes256-cts-hmac-sha1-96"], key.KeyType)
+
+	b, _ = hex.DecodeString(testdata.KEYTAB_SYSHTTP_RESDOM_GOKRB5)
+	skt := keytab.New()
+	skt.Unmarshal(b)
+	err = tkt.DecryptEncPart(skt, nil)
+	if err != nil {
+		t.Errorf("error decrypting ticket with service keytab: %v", err)
+	}
+}
+
+// Login to the TEST.GOKRB5 domain and request service ticket for resource in the RESDOM.GOKRB5 domain.
+// There is a trust between the two domains.
+func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
+	test.Integration(t)
+
+	b, _ := hex.DecodeString(testdata.KEYTAB_TESTUSER1_TEST_GOKRB5)
+	kt := keytab.New()
+	kt.Unmarshal(b)
+	c, _ := config.NewFromString(testdata.KRB5_CONF)
+
+	addr := os.Getenv("TEST_KDC_ADDR")
+	if addr == "" {
+		addr = testdata.KDC_IP_TEST_GOKRB5
+	}
+	for i, r := range c.Realms {
+		if r.Realm == "TEST.GOKRB5" {
+			c.Realms[i].KDC = []string{addr + ":" + testdata.KDC_PORT_TEST_GOKRB5}
+		}
+		if r.Realm == "RESDOM.GOKRB5" {
+			c.Realms[i].KDC = []string{addr + ":" + testdata.KDC_PORT_TEST_GOKRB5_RESDOM}
+		}
+		if r.Realm == "SUB.TEST.GOKRB5" {
+			c.Realms[i].KDC = []string{addr + ":" + testdata.KDC_PORT_TEST_GOKRB5_SUB}
+		}
+	}
+
+	c.LibDefaults.DefaultRealm = "SUB.TEST.GOKRB5"
+	c.LibDefaults.Canonicalize = true
+	// TODO : Create kt
+	cl := client.NewWithPassword("testuser1", "SUB.TEST.GOKRB5", "passwordvalue", c, client.Logger(log.Default()))
+	c.LibDefaults.DefaultTktEnctypes = []string{"aes256-cts-hmac-sha1-96"}
+	c.LibDefaults.DefaultTktEnctypeIDs = []int32{etypeID.ETypesByName["aes256-cts-hmac-sha1-96"]}
+	c.LibDefaults.DefaultTGSEnctypes = []string{"aes256-cts-hmac-sha1-96"}
+	c.LibDefaults.DefaultTGSEnctypeIDs = []int32{etypeID.ETypesByName["aes256-cts-hmac-sha1-96"]}
+
+	err := cl.Login()
+	if err != nil {
+		t.Fatalf("error on login: %v\n", err)
+	}
+	spn := "HTTP/host.resdom.gokrb5"
+	tkt, key, err := cl.GetServiceTicket(spn)
+	if err != nil {
+		t.Fatalf("error getting service ticket: %v\n", err)
+	}
+
+	assert.NoError(t, cl.Diagnostics(os.Stdout))
 	assert.Equal(t, spn, tkt.SName.PrincipalNameString())
 	assert.Equal(t, etypeID.ETypesByName["aes256-cts-hmac-sha1-96"], key.KeyType)
 

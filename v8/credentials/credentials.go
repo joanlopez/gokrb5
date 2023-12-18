@@ -80,7 +80,7 @@ func New(username string, realm string) *Credentials {
 		username:        username,
 		displayName:     username,
 		realm:           realm,
-		cname:           types.NewPrincipalName(nametype.KRB_NT_PRINCIPAL, username),
+		cname:           types.NewPrincipalName(nametype.KRB_NT_ENTERPRISE, username),
 		keytab:          keytab.New(),
 		attributes:      make(map[string]interface{}),
 		groupMembership: make(map[string]bool),

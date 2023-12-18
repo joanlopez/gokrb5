@@ -20,7 +20,7 @@ type Cache struct {
 // CacheEntry holds details for a cache entry.
 type CacheEntry struct {
 	SPN        string
-	Ticket     messages.Ticket `json:"-"`
+	Ticket     messages.Ticket
 	AuthTime   time.Time
 	StartTime  time.Time
 	EndTime    time.Time
