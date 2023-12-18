@@ -146,6 +146,7 @@ const (
   default_tkt_enctypes = aes256-cts-hmac-sha1-96
   default_tgs_enctypes = aes256-cts-hmac-sha1-96
   noaddresses = false
+  canonicalize = true
 
 [realms]
  TEST.GOKRB5 = {
