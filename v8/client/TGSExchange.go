@@ -75,7 +75,10 @@ func (cl *Client) TGSExchange(tgsReq messages.TGSReq, kdcRealm string, tgt messa
 		tgsRep.DecryptedEncPart.Key,
 	)
 	cl.Log("ticket added to cache for %s (EndTime: %v)", tgsRep.Ticket.SName.PrincipalNameString(), tgsRep.DecryptedEncPart.EndTime)
-	cl.Log("response: %v", tgsRep)
+	cl.Log("response: %+v", tgsRep)
+	cl.Log("response cname: %+v", tgsRep.KDCRepFields.CName)
+	cl.Log("response real: %s", tgsRep.KDCRepFields.CRealm)
+	cl.Log("response ticket sname: %+v", tgsRep.KDCRepFields.Ticket.SName)
 	return tgsReq, tgsRep, err
 }
 
