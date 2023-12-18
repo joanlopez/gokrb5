@@ -85,7 +85,7 @@ jobs:
       - name: Tests including integration tests
         run: |
           cd ${GITHUB_WORKFLOW}
-          go test -race ./client/... -run="TestClient_GetServiceTicket_Trusted_Resource"
+          go test -race -v ./client/... -run="TestClient_GetServiceTicket_Trusted_Resource"
         env:
           INTEGRATION: 1
           TESTPRIVILEGED: 1
