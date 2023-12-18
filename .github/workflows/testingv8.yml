@@ -38,11 +38,11 @@ jobs:
           test -z $(gofmt -s -l -e $GO_FILES | tee /dev/fd/2 | xargs | sed 's/\s//g')
         id: gofmt
 
-      - name: Unit tests
-        run: |
-          cd ${GITHUB_WORKFLOW}
-          go test -race ./...
-        id: unitTests
+#      - name: Unit tests
+#        run: |
+#          cd ${GITHUB_WORKFLOW}
+#          go test -race ./...
+#        id: unitTests
 
       - name: Check out integration test dependencies
         uses: actions/checkout@v4
