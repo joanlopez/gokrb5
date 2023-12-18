@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -578,8 +579,9 @@ func TestClient_GetServiceTicket_Trusted_Resource_SubDomain(t *testing.T) {
 	}
 
 	c.LibDefaults.DefaultRealm = "SUB.TEST.GOKRB5"
+	c.LibDefaults.Canonicalize = true
 	// TODO : Create kt
-	cl := client.NewWithPassword("testuser1", "SUB.TEST.GOKRB5", "passwordvalue", c)
+	cl := client.NewWithPassword("testuser1", "SUB.TEST.GOKRB5", "passwordvalue", c, client.Logger(log.Default()))
 	c.LibDefaults.DefaultTktEnctypes = []string{"aes256-cts-hmac-sha1-96"}
 	c.LibDefaults.DefaultTktEnctypeIDs = []int32{etypeID.ETypesByName["aes256-cts-hmac-sha1-96"]}
 	c.LibDefaults.DefaultTGSEnctypes = []string{"aes256-cts-hmac-sha1-96"}
